@@ -1,6 +1,7 @@
 package com.ncallaway.schess.backend.data;
 
-import com.ncallaway.schess.backend.data.pieces.Piece;
+import com.ncallaway.schess.backend.factory.PieceFactory;
+
 
 public class Board {
   public static final int NUMBER_RANKS = 8;
@@ -45,8 +46,44 @@ public class Board {
     return getPieceAt(indexFromBoardPosition(whiteRank, file));
   }
 
+  public void putPiece(final Piece piece, final BoardPosition position) {
+    putPiece(piece, indexFromBoardPosition(position));
+  }
+  
+  public void putPiece(final Piece piece, final int whiteRank, final int file) {
+    putPiece(piece, indexFromBoardPosition(whiteRank, file));
+  }
+
+  public void putPiece(final Piece piece, final int index) {
+    if (index < 0 || index > BOARD_SIZE) {
+      throw new IllegalArgumentException("index was out of bounds: " + index);
+    }
+    
+    board[index] = piece;
+  }
+  
+  public void removePiece(final int index) {
+    if (index < 0 || index > BOARD_SIZE) {
+      throw new IllegalArgumentException("index was out of bounds: " + index);
+    }
+    
+    board[index] = PieceFactory.createPieceFromCharacter(' ', index, this);
+  }
+
   public Piece getPieceAt(final BoardPosition position) {
     return getPieceAt(position.getWhiteRank(), position.getFile());
+  }
+  
+  public static boolean isOnBoard(int rank, int file) {
+    if (rank < 0 || rank >= Board.NUMBER_RANKS) {
+      return false;
+    }
+    
+    if (file < 0 || file >= Board.NUMBER_FILES) {
+      return false;
+    }
+    
+    return true;
   }
 
   public static int indexFromBoardPosition(final BoardPosition position) {

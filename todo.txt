@@ -1,0 +1,3 @@
+- Make game / board immutable
+- Add history to game
+- Have better king detection.
